@@ -1,0 +1,19 @@
+How long did this take (estimate)?
+    This lab took me in-class time and around 5 hours outside of class.
+
+What were the enjoyable aspects of the lab?
+    I enjoyed the dynamic re-sizing aspect of the scatterplot graph, and I found it 
+satisfying to see how the visualization adapted smoothly when switching between 
+desktop and mobile views. 
+
+What were the challenging parts of this lab?
+    The most challenging part was making sure the SVG container resized correctly and
+that all chart elements (like axes and labels) updated with it. It was tricky to keep 
+everything aligned correctly. 
+
+What resources did you use? Include links to websites below. 
+https://d3-graph-gallery.com/graph/custom_responsive.html 
+
+
+
+
