@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Climate Concern Choropleth</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Title and instructions -->
+  <div class="title-container">
+    <h1>Estimated % of adults who are worried about global warming</h1>
+    <p>
+      Click and slide over the slider to see a map of each year. Click 
+      <span class="play-icon">▶</span> to see an animation of the state populations' opinions over time. 
+      Hover over each state to see a chart of the population's opinion over time.
+    </p>
+  </div>
+
+  <!-- Controls (Slider + Label + Play) -->
+  <div class="controls">
+    <div id="year-label">Year: </div>
+    <div class="slider-container">
+      <input type="range" id="year-slider">
+      <button id="play-button">▶ Play</button>
+    </div>
+  </div>
+
+  <!-- Map and Chart Layout -->
+  <div class="map-chart-wrapper">
+    <div id="map-container">
+      <svg id="map" width="1040" height="620">
+        <defs>
+          <!-- Softer glow for hover -->
+          <filter id="hover-glow">
+            <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#FFFFED" flood-opacity="0.8"/>
+          </filter>
+        
+          <!-- Stronger glow for selected state -->
+          <filter id="selected-glow">
+            <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#FFD700" flood-opacity="1"/>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+    <div id="line-chart-container">
+    </div>
+  </div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip"></div>
+
+  <!-- Main script -->
+  <script src="main.js"></script>
+
+  <div id="popup-warning" style="
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffefc5;
+  color: #333;
+  padding: 10px 18px;
+  border: 1px solid #e0c177;
+  border-radius: 6px;
+  font-size: 15px;
+  z-index: 1000;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.3s ease;
+">
+  Pause animation to select a state.
+</div>
+
+
+</body>
+</html>
