@@ -1,9 +1,10 @@
-var width = 960;
-var height = 600;
+var width = 700;
+var height = 500;
 var lowColor = '#f0f8ff';
 var highColor = '#000068';
 var svg = d3.select("#map");
-var projection = d3.geoAlbersUsa().translate([width / 2, height / 2]).scale([1325]);
+var projection = d3.geoAlbersUsa().translate([width / 1.85, height / 1.9]).scale([1050]);
+
 
 var path = d3.geoPath().projection(projection);
 var tooltip = d3.select("#tooltip");
@@ -184,19 +185,23 @@ d3.csv("climate_worried_by_state.csv", function(dataRaw) {
 
     // Vertical Legend scaled to match map height
     const legendBins = d3.range(35, 75, 5).reverse();
-    const legendHeight = 240; // Match map height
+    const legendHeight = 400; // Match map height
     const binHeight = legendHeight / legendBins.length;
 
-    const legendGroup = svg.append("g")
-      .attr("id", "legend")
-      .attr("transform", `translate(${width - 50}, ${height / 2 - legendHeight / 2 + 50})`);
+    const legendSvg = d3.select("#legend-container")
+      .append("svg")
+      .attr("width", 90)
+      .attr("height", 460); // Adjust if needed
+
+const legendGroup = legendSvg.append("g")
+  .attr("transform", `translate(-15, 30)`);
 
     legendBins.forEach((start, i) => {
       const end = start + 5;
       const yPos = i * binHeight;
 
       legendGroup.append("rect")
-        .attr("x", 10)
+        .attr("x", 20)
         .attr("y", yPos)
         .attr("width", 30)
         .attr("height", binHeight)
@@ -254,7 +259,7 @@ d3.csv("climate_worried_by_state.csv", function(dataRaw) {
         });
 
       legendGroup.append("text")
-        .attr("x", 45)
+        .attr("x", 55)
         .attr("y", yPos - 3) // shift closer to the top edge of each bin
         .text(`${end}%`)     // show only the top value
         .style("font-size", "12px")
@@ -262,29 +267,21 @@ d3.csv("climate_worried_by_state.csv", function(dataRaw) {
     });
 
     // Add Clear Filters button
-    svg.append("foreignObject")
-      .attr("x", width - 80)
-      .attr("y", height / 2 + legendHeight / 2 + 60) // just below the legend
-      .attr("width", 130)
-      .attr("height", 40)
-      .append("xhtml:button")
-      .attr("id", "clear-filters-button") 
-        .attr("disabled", true)
-        .style("cursor", "not-allowed")
-      .text("Clear All Filters")
+    d3.select("#legend-container")
+      .append("button")
+      .attr("id", "clear-filters-button")
+      .attr("disabled", true)
+      .style("cursor", "not-allowed")
       .style("padding", "5px 10px")
-      .style("font-size", "14px")
-      .style("cursor", "pointer")
+      .style("font-size", "12px")
+      .text("Clear All Filters")
       .on("click", () => {
         selectedBins.clear();
         d3.selectAll(".legend-bin").classed("active", false);
-
         const sliderValue = +d3.select("#year-slider").property("value");
         currentYear = years[sliderValue];
         updateMap(currentYear);
         d3.select("#year-label").text(`Year: ${currentYear}`);
-
-        // Disable button after clearing
         d3.select("#clear-filters-button")
           .attr("disabled", true)
           .style("cursor", "not-allowed");
@@ -299,7 +296,7 @@ d3.csv("climate_worried_by_state.csv", function(dataRaw) {
 
       // Add "Unselect State" button below the chart
       const margin = { top: 40, right: 30, bottom: 50, left: 60 };
-      const width = 650 - margin.left - margin.right;
+      const width = 550 - margin.left - margin.right;
       const height = 400 - margin.top - margin.bottom;
     
       const svgLine = d3.select("#line-chart-container")
@@ -322,11 +319,11 @@ d3.csv("climate_worried_by_state.csv", function(dataRaw) {
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickFormat(d3.format("d")))
         .selectAll("text")
-        .style("font-size", "14px"); 
+        .style("font-size", "12px"); 
       svgLine.append("g")
         .call(d3.axisLeft(y))
         .selectAll("text")
-        .style("font-size", "14px"); 
+        .style("font-size", "12px"); 
     
       // Blue national average line
       svgLine.append("path")
@@ -433,7 +430,7 @@ svgLine.append("path")
         .attr("x", width / 2)
         .attr("y", -10)
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
+        .style("font-size", "15px")
         .style("font-weight", "bold")
         .text(`% Worried About Global Warming: ${stateName} vs National Avg`);
     
@@ -441,7 +438,7 @@ svgLine.append("path")
         .attr("x", width / 2)
         .attr("y", height + 48)
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "15px")
         .text("Year");
     
       svgLine.append("text")
@@ -449,7 +446,7 @@ svgLine.append("path")
         .attr("y", -45)
         .attr("x", -height / 2)
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "15px")
         .text("% Worried");
       
         // Add unselect button outside the SVG (under the chart)
@@ -463,7 +460,7 @@ svgLine.append("path")
         .attr("id", "unselect-button")
         .text("Unselect State")
         .style("padding", "6px 14px")
-        .style("font-size", "14px")
+        .style("font-size", "12px")
         .style("cursor", "pointer")
         .on("click", () => {
           selectedStateName = null;
@@ -491,7 +488,7 @@ svgLine.append("path")
       d3.select("#line-chart-container").html(""); 
     
       const margin = { top: 40, right: 30, bottom: 50, left: 60 };
-      const width = 650 - margin.left - margin.right;
+      const width = 550 - margin.left - margin.right;
       const height = 400 - margin.top - margin.bottom;
 
       const svgLine = d3.select("#line-chart-container")
@@ -510,12 +507,12 @@ svgLine.append("path")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickFormat(d3.format("d")))
         .selectAll("text")
-        .style("font-size", "14px"); 
+        .style("font-size", "12px"); 
 
       svgLine.append("g")
         .call(d3.axisLeft(y))
         .selectAll("text")
-        .style("font-size", "14px");
+        .style("font-size", "12px");
     
       svgLine.append("path")
         .datum(values)
@@ -552,7 +549,7 @@ svgLine.append("path")
         .attr("x", width / 2)
         .attr("y", -10)
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
+        .style("font-size", "15px")
         .style("font-weight", "bold")
         .text("% Worried About Global Warming: National Avg");
     
@@ -560,7 +557,7 @@ svgLine.append("path")
         .attr("x", width / 2)
         .attr("y", height + 48)
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "15px")
         .text("Year");
     
       svgLine.append("text")
@@ -568,7 +565,7 @@ svgLine.append("path")
         .attr("y", -45)
         .attr("x", -height / 2)
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "15px")
         .text("% Worried");
       
       d3.select("#line-chart-container")
@@ -582,7 +579,7 @@ svgLine.append("path")
         .text("Unselect State")
         .attr("disabled", true) // disable button when no state is selected
         .style("padding", "6px 14px")
-        .style("font-size", "14px")
+        .style("font-size", "12px")
         .style("cursor", "not-allowed");
     }
     
